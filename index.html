@@ -197,14 +197,15 @@
         }
 
         #long-player {
-            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Aumentamos la duración a 0.5s para un fade más cinemático */
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
             opacity: 1;
             transform: scale(1);
         }
 
         #long-player.video-changing {
             opacity: 0;
-            transform: scale(0.98);
+            transform: scale(0.97); /* Zoom invertido un poco más sutil */
         }
 
         iframe {
@@ -473,7 +474,7 @@
                 "https://www.youtube.com/embed/Mn37BHbm-Fk",
                 // Agregué un tercer video para que la animación de "cartas" luzca bien (Izquierda, Centro, Derecha).
                 // Puedes cambiar este por uno nuevo cuando quieras.
-                "https://www.youtube.com/embed/wIIlRHIEbUU" 
+                "https://www.youtube.com/embed/wIIlRHIEbUU"
             ]
         };
 
@@ -495,20 +496,20 @@
             // 1. Iniciamos la animación de "salida" (desaparece)
             player.classList.add('video-changing');
             
-            // 2. Esperamos 300ms a que termine de desaparecer para cambiar el video
+            // 2. Esperamos 500ms a que termine de desaparecer por completo
             setTimeout(() => {
                 indices.long += direction;
                 if (indices.long >= videos.long.length) indices.long = 0;
                 if (indices.long < 0) indices.long = videos.long.length - 1;
                 
-                updateLongVideo(); // Cambia el video mientras está invisible
+                updateLongVideo(); // Cambia el link del iframe en la oscuridad
                 
-                // 3. Un instante después, quitamos la clase para que el nuevo video aparezca
+                // 3. Le damos 200ms extra a YouTube para cargar la miniatura antes de reaparecer
                 setTimeout(() => {
                     player.classList.remove('video-changing');
-                }, 50);
+                }, 200);
                 
-            }, 300); // 300ms es el tiempo que dura la transición CSS
+            }, 500); // Coincide con los 0.5s de la transición CSS
         }
 
         /* LOGICA PARA EL CARRUSEL DE SHORTS 3D */
