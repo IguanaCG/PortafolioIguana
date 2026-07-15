@@ -5,23 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iguanaEditor 🦎 | Portafolio</title>
     
-    <!-- Fuentes: Rajdhani para títulos y Inter para textos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta de colores estricta */
-            --bg: #0A0F0D; /* Fondo casi negro con tono verdoso */
-            --surface: #111814; /* Paneles ligeramente más claros */
-            --border: #233028; /* Líneas finas */
-            --accent-green: #B6FF3C; /* Verde eléctrico tipo iguana/scale */
-            --accent-coral: #FF5B39; /* Naranja/Coral marcador de corte */
+            /* Paleta estricta técnica */
+            --bg: #0A0F0D; 
+            --surface: #111814; 
+            --border: #233028; 
+            --accent-green: #B6FF3C; 
+            --accent-coral: #FF5B39; 
             --text: #e2e8f0;
             --text-sec: #8c9b90;
             
-            /* Tipografías */
             --font-title: 'Rajdhani', sans-serif;
             --font-text: 'Inter', sans-serif;
         }
@@ -30,8 +28,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* Brutalismo: Cero bordes redondeados forzados */
-            border-radius: 0 !important; 
+            border-radius: 0 !important; /* Estilo brutalista 100% cuadrado */
         }
 
         body {
@@ -43,7 +40,6 @@
             position: relative;
         }
 
-        /* Scanlines Overlay - Sutil para sensación de monitor */
         body::after {
             content: "";
             position: fixed;
@@ -54,12 +50,12 @@
             background: linear-gradient(
                 to bottom,
                 rgba(255,255,255,0) 50%,
-                rgba(0,0,0,0.2) 50%
+                rgba(0,0,0,0.15) 50%
             );
             background-size: 100% 4px;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         .container {
@@ -75,7 +71,6 @@
             letter-spacing: 1px;
         }
 
-        /* Paneles estilo Interfaz/Software */
         .panel {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -97,7 +92,6 @@
             line-height: 1.1;
         }
 
-        /* Glow sutil en textos destacados */
         .accent {
             color: var(--accent-green);
             text-shadow: 0 0 10px rgba(182, 255, 60, 0.25);
@@ -178,12 +172,8 @@
             font-weight: 800;
         }
 
-        .carousel {
-            padding: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
+        .media-container {
+            padding: 1.5rem;
         }
 
         .video-wrapper {
@@ -196,7 +186,7 @@
             border: 1px solid var(--border);
         }
 
-        /* Marcadores de corte (detalles en coral) */
+        /* Marcadores de corte en las esquinas */
         .video-wrapper::before, .video-wrapper::after {
             content: '';
             position: absolute;
@@ -238,20 +228,42 @@
             max-width: 320px;
         }
 
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .video-counter {
+            font-family: var(--font-title);
+            color: var(--text-sec);
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            background: var(--bg);
+            padding: 0.25rem 1rem;
+            border: 1px solid var(--border);
+        }
+
         .btn-arrow {
             background: var(--bg);
             color: var(--text-sec);
             border: 1px solid var(--border);
-            width: 40px;
-            height: 40px;
+            padding: 0.5rem 1rem;
             font-size: 1rem;
+            font-family: var(--font-title);
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            z-index: 10;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .btn-arrow:hover {
@@ -279,7 +291,6 @@
             margin: 0 auto 1.5rem auto;
         }
 
-        /* Estilos para botones de redes sociales */
         .social-links {
             display: flex;
             justify-content: center;
@@ -325,18 +336,16 @@
 
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
-            .carousel {
+            .controls-bar {
                 flex-direction: column;
-                padding: 1.5rem 1rem;
-            }
-            .carousel-controls {
-                display: flex;
                 gap: 1rem;
-                margin-top: 1rem;
+            }
+            .controls-bar .video-counter {
+                order: -1; /* Pone el contador arriba de los botones en celular */
             }
             .btn-arrow {
-                width: 50px;
-                height: 40px;
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -344,7 +353,6 @@
 <body>
     <div class="container">
         
-        <!-- HERO -->
         <header class="hero panel">
             <h1>¡Hola! ¿Qué tal? <br>Soy <span class="accent">Carlos</span> 🦎</h1>
             <p class="bio">La persona detrás de <span class="font-title accent">iguanaEditor</span>. Me especializo en Gaming y Memes. Pero me adapto a cualquier otro tipo de contenido.</p>
@@ -353,53 +361,39 @@
 
         <h1 class="portfolio-title">Mi portafolio</h1>
 
-        <!-- VIDEOS LARGOS -->
         <section class="section">
             <h2>Videos largos</h2>
-            <div class="carousel panel">
-                <!-- Flecha versión escritorio -->
-                <button class="btn-arrow" onclick="changeVideo('long', -1)" style="display: none;" id="btn-long-prev">&#10094;</button>
-                
+            <div class="panel media-container">
                 <div class="video-wrapper">
-                    <!-- Reemplaza los src con tus links embed de YouTube -->
-                    <iframe id="long-player" class="horizontal-video" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    <!-- El src está vacío porque el script de abajo lo llenará automáticamente -->
+                    <iframe id="long-player" class="horizontal-video" src="" allowfullscreen></iframe>
                 </div>
                 
-                <!-- Flecha versión escritorio -->
-                <button class="btn-arrow" onclick="changeVideo('long', 1)" style="display: none;" id="btn-long-next">&#10095;</button>
-
-                <!-- Controles para móvil -->
-                <div class="carousel-controls" id="controls-long-mobile">
-                    <button class="btn-arrow" onclick="changeVideo('long', -1)">&#10094;</button>
-                    <button class="btn-arrow" onclick="changeVideo('long', 1)">&#10095;</button>
+                <!-- Barra de controles inferior -->
+                <div class="controls-bar">
+                    <button class="btn-arrow" onclick="changeVideo('long', -1)">◄ Anterior</button>
+                    <div class="video-counter" id="long-counter">01 // 00</div>
+                    <button class="btn-arrow" onclick="changeVideo('long', 1)">Siguiente ►</button>
                 </div>
             </div>
         </section>
 
-        <!-- VIDEOS VERTICALES -->
         <section class="section">
             <h2>Videos verticales</h2>
-            <div class="carousel panel">
-                <!-- Flecha versión escritorio -->
-                <button class="btn-arrow" onclick="changeVideo('short', -1)" style="display: none;" id="btn-short-prev">&#10094;</button>
-                
+            <div class="panel media-container">
                 <div class="video-wrapper">
-                    <!-- Reemplaza los src con tus links embed de YouTube Shorts/TikTok -->
-                    <iframe id="short-player" class="vertical-video" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    <iframe id="short-player" class="vertical-video" src="" allowfullscreen></iframe>
                 </div>
                 
-                <!-- Flecha versión escritorio -->
-                <button class="btn-arrow" onclick="changeVideo('short', 1)" style="display: none;" id="btn-short-next">&#10095;</button>
-
-                <!-- Controles para móvil -->
-                <div class="carousel-controls" id="controls-short-mobile">
-                    <button class="btn-arrow" onclick="changeVideo('short', -1)">&#10094;</button>
-                    <button class="btn-arrow" onclick="changeVideo('short', 1)">&#10095;</button>
+                <!-- Barra de controles inferior -->
+                <div class="controls-bar" style="max-width: 320px;">
+                    <button class="btn-arrow" onclick="changeVideo('short', -1)">◄</button>
+                    <div class="video-counter" id="short-counter">01 // 00</div>
+                    <button class="btn-arrow" onclick="changeVideo('short', 1)">►</button>
                 </div>
             </div>
         </section>
 
-        <!-- CONTACTO -->
         <footer class="contact panel">
             <h2>Contáctame</h2>
             <p>Si tienes alguna idea en mente o necesitas un tipo de edición más específico, ¡cuéntamelo! Podemos platicar y llegar a un acuerdo que se adapte por completo a tu proyecto. ✨</p>
@@ -422,44 +416,47 @@
     </div>
 
     <script>
-        // Lógica de los videos
+        // AQUÍ PON TUS ENLACES. SOLO TIENES QUE CAMBIAR ESTO Y NADA MÁS.
         const videos = {
             long: [
-                "https://youtu.be/s8NzIBpJC5M?si=qZhsdkmyeMsPvVy3",
-                "https://youtu.be/tyhVqgvGRlU?si=Ib5UUA8EA1eeAJBF"
-		        "https://youtu.be/x79033fSle4?si=W6EmNIvEbEBeFld5"
+                "https://youtu.be/s8NzIBpJC5M",
+                "https://youtu.be/tyhVqgvGRlU",
+                "https://youtu.be/x79033fSle4"
             ],
             short: [
-                "https://youtube.com/shorts/P7sPj9KanNc",
-                "https://youtube.com/shorts/wIIlRHIEbUU"
+                "https://www.youtube.com/shorts/P7sPj9KanNc",
+                "https://youtube.com/shorts/Mn37BHbm-Fk"
             ]
         };
 
         let indices = { long: 0, short: 0 };
 
+        // Función para actualizar el contador de texto (Ej: 01 // 03)
+        function updateCounter(type) {
+            const current = (indices[type] + 1).toString().padStart(2, '0');
+            const total = videos[type].length.toString().padStart(2, '0');
+            document.getElementById(`${type}-counter`).innerText = `${current} // ${total}`;
+        }
+
+        // Función para cambiar el video
         function changeVideo(type, direction) {
             indices[type] += direction;
+            
+            // Si llega al final, vuelve al principio y viceversa
             if (indices[type] >= videos[type].length) indices[type] = 0;
             if (indices[type] < 0) indices[type] = videos[type].length - 1;
             
             document.getElementById(`${type}-player`).src = videos[type][indices[type]];
+            updateCounter(type);
         }
 
-        // Lógica para adaptar las flechas según el tamaño de pantalla
-        function handleResize() {
-            const isMobile = window.innerWidth <= 768;
-            
-            document.getElementById('btn-long-prev').style.display = isMobile ? 'none' : 'flex';
-            document.getElementById('btn-long-next').style.display = isMobile ? 'none' : 'flex';
-            document.getElementById('controls-long-mobile').style.display = isMobile ? 'flex' : 'none';
-
-            document.getElementById('btn-short-prev').style.display = isMobile ? 'none' : 'flex';
-            document.getElementById('btn-short-next').style.display = isMobile ? 'none' : 'flex';
-            document.getElementById('controls-short-mobile').style.display = isMobile ? 'flex' : 'none';
-        }
-
-        window.addEventListener('resize', handleResize);
-        handleResize(); // Ejecutar al inicio
+        // Cuando la página carga por primera vez, pone automáticamente el video 0
+        window.onload = function() {
+            document.getElementById('long-player').src = videos.long[0];
+            document.getElementById('short-player').src = videos.short[0];
+            updateCounter('long');
+            updateCounter('short');
+        };
     </script>
 </body>
 </html>
