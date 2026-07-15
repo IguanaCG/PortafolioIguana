@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iguanaEditor 🦎 | Portafolio</title>
+    
+    <!-- Fuentes: Rajdhani para títulos y Inter para textos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta de colores estricta */
+            --bg: #0A0F0D; /* Fondo casi negro con tono verdoso */
+            --surface: #111814; /* Paneles ligeramente más claros */
+            --border: #233028; /* Líneas finas */
+            --accent-green: #B6FF3C; /* Verde eléctrico tipo iguana/scale */
+            --accent-coral: #FF5B39; /* Naranja/Coral marcador de corte */
+            --text: #e2e8f0;
+            --text-sec: #8c9b90;
+            
+            /* Tipografías */
+            --font-title: 'Rajdhani', sans-serif;
+            --font-text: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* Brutalismo: Cero bordes redondeados forzados */
+            border-radius: 0 !important; 
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-text);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+
+        /* Scanlines Overlay - Sutil para sensación de monitor */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1, h2, h3, .font-title {
+            font-family: var(--font-title);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Paneles estilo Interfaz/Software */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 2px solid var(--accent-green); 
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.1;
+        }
+
+        /* Glow sutil en textos destacados */
+        .accent {
+            color: var(--accent-green);
+            text-shadow: 0 0 10px rgba(182, 255, 60, 0.25);
+            font-weight: 800;
+        }
+
+        .bio {
+            font-size: 1.1rem;
+            color: var(--text-sec);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--bg);
+            color: var(--text-sec);
+            padding: 0.5rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            font-family: var(--font-title);
+            letter-spacing: 1px;
+        }
+
+        .badge::before {
+            content: 'REC';
+            color: var(--accent-coral);
+            font-size: 0.8rem;
+            font-weight: bold;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .portfolio-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
+            color: var(--accent-green);
+            background: var(--surface);
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            border: 1px solid var(--border);
+            border-left: 2px solid var(--accent-coral);
+            left: 50%;
+            position: relative;
+            transform: translateX(-50%);
+            text-shadow: 0 0 8px rgba(182, 255, 60, 0.3);
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-left: 2px solid var(--accent-green);
+            background: var(--surface);
+            width: fit-content;
+        }
+
+        h2::before {
+            content: '//';
+            color: var(--accent-coral);
+            font-weight: 800;
+        }
+
+        .carousel {
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            background: var(--bg);
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+        }
+
+        /* Marcadores de corte (detalles en coral) */
+        .video-wrapper::before, .video-wrapper::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 1px solid var(--accent-coral);
+            pointer-events: none;
+            z-index: 5;
+        }
+        .video-wrapper::before {
+            top: -1px;
+            left: -1px;
+            border-right: none;
+            border-bottom: none;
+        }
+        .video-wrapper::after {
+            bottom: -1px;
+            right: -1px;
+            border-left: none;
+            border-top: none;
+        }
+
+        iframe {
+            background: #000;
+            border: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .horizontal-video {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            max-width: 700px;
+        }
+
+        .vertical-video {
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            max-width: 320px;
+        }
+
+        .btn-arrow {
+            background: var(--bg);
+            color: var(--text-sec);
+            border: 1px solid var(--border);
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .btn-arrow:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            background: rgba(182, 255, 60, 0.05);
+            text-shadow: 0 0 5px rgba(182, 255, 60, 0.5);
+        }
+
+        .contact {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--accent-coral);
+            margin-top: 2rem;
+        }
+
+        .contact p {
+            font-size: 1rem;
+            max-width: 650px;
+            margin: 0 auto 1.5rem;
+            color: var(--text-sec);
+        }
+
+        .contact h2 {
+            margin: 0 auto 1.5rem auto;
+        }
+
+        /* Estilos para botones de redes sociales */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 2.5rem;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--bg);
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--border);
+            font-family: var(--font-title);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        .social-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-sec);
+            transition: fill 0.2s ease;
+        }
+
+        .social-btn:hover {
+            border-color: var(--accent-green);
+            background: rgba(182, 255, 60, 0.05);
+            color: var(--accent-green);
+            text-shadow: 0 0 8px rgba(182, 255, 60, 0.3);
+        }
+
+        .social-btn:hover svg {
+            fill: var(--accent-green);
+            filter: drop-shadow(0 0 5px rgba(182, 255, 60, 0.5));
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .carousel {
+                flex-direction: column;
+                padding: 1.5rem 1rem;
+            }
+            .carousel-controls {
+                display: flex;
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+            .btn-arrow {
+                width: 50px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- HERO -->
+        <header class="hero panel">
+            <h1>¡Hola! ¿Qué tal? <br>Soy <span class="accent">Carlos</span> 🦎</h1>
+            <p class="bio">La persona detrás de <span class="font-title accent">iguanaEditor</span>. Me especializo en Gaming y Memes. Pero me adapto a cualquier otro tipo de contenido.</p>
+            <div class="badge">Todos mis videos son editados con DaVinci Resolve</div>
+        </header>
+
+        <h1 class="portfolio-title">Mi portafolio</h1>
+
+        <!-- VIDEOS LARGOS -->
+        <section class="section">
+            <h2>Videos largos</h2>
+            <div class="carousel panel">
+                <!-- Flecha versión escritorio -->
+                <button class="btn-arrow" onclick="changeVideo('long', -1)" style="display: none;" id="btn-long-prev">&#10094;</button>
+                
+                <div class="video-wrapper">
+                    <!-- Reemplaza los src con tus links embed de YouTube -->
+                    <iframe id="long-player" class="horizontal-video" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                </div>
+                
+                <!-- Flecha versión escritorio -->
+                <button class="btn-arrow" onclick="changeVideo('long', 1)" style="display: none;" id="btn-long-next">&#10095;</button>
+
+                <!-- Controles para móvil -->
+                <div class="carousel-controls" id="controls-long-mobile">
+                    <button class="btn-arrow" onclick="changeVideo('long', -1)">&#10094;</button>
+                    <button class="btn-arrow" onclick="changeVideo('long', 1)">&#10095;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIDEOS VERTICALES -->
+        <section class="section">
+            <h2>Videos verticales</h2>
+            <div class="carousel panel">
+                <!-- Flecha versión escritorio -->
+                <button class="btn-arrow" onclick="changeVideo('short', -1)" style="display: none;" id="btn-short-prev">&#10094;</button>
+                
+                <div class="video-wrapper">
+                    <!-- Reemplaza los src con tus links embed de YouTube Shorts/TikTok -->
+                    <iframe id="short-player" class="vertical-video" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                </div>
+                
+                <!-- Flecha versión escritorio -->
+                <button class="btn-arrow" onclick="changeVideo('short', 1)" style="display: none;" id="btn-short-next">&#10095;</button>
+
+                <!-- Controles para móvil -->
+                <div class="carousel-controls" id="controls-short-mobile">
+                    <button class="btn-arrow" onclick="changeVideo('short', -1)">&#10094;</button>
+                    <button class="btn-arrow" onclick="changeVideo('short', 1)">&#10095;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACTO -->
+        <footer class="contact panel">
+            <h2>Contáctame</h2>
+            <p>Si tienes alguna idea en mente o necesitas un tipo de edición más específico, ¡cuéntamelo! Podemos platicar y llegar a un acuerdo que se adapte por completo a tu proyecto. ✨</p>
+
+            <div class="social-links">
+                <a href="mailto:iguanaeditor@gmail.com" class="social-btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
+                    Email
+                </a>
+                <a href="https://x.com/iguanacg" target="_blank" rel="noopener noreferrer" class="social-btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    X (Twitter)
+                </a>
+                <a href="https://discord.com/users/431931152392257566" target="_blank" rel="noopener noreferrer" class="social-btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                    Discord
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Lógica de los videos
+        const videos = {
+            long: [
+                "https://youtu.be/s8NzIBpJC5M?si=qZhsdkmyeMsPvVy3",
+                "https://youtu.be/tyhVqgvGRlU?si=Ib5UUA8EA1eeAJBF"
+		"https://youtu.be/x79033fSle4?si=W6EmNIvEbEBeFld5"
+            ],
+            short: [
+                "https://youtube.com/shorts/P7sPj9KanNc",
+                "https://youtube.com/shorts/wIIlRHIEbUU"
+            ]
+        };
+
+        let indices = { long: 0, short: 0 };
+
+        function changeVideo(type, direction) {
+            indices[type] += direction;
+            if (indices[type] >= videos[type].length) indices[type] = 0;
+            if (indices[type] < 0) indices[type] = videos[type].length - 1;
+            
+            document.getElementById(`${type}-player`).src = videos[type][indices[type]];
+        }
+
+        // Lógica para adaptar las flechas según el tamaño de pantalla
+        function handleResize() {
+            const isMobile = window.innerWidth <= 768;
+            
+            document.getElementById('btn-long-prev').style.display = isMobile ? 'none' : 'flex';
+            document.getElementById('btn-long-next').style.display = isMobile ? 'none' : 'flex';
+            document.getElementById('controls-long-mobile').style.display = isMobile ? 'flex' : 'none';
+
+            document.getElementById('btn-short-prev').style.display = isMobile ? 'none' : 'flex';
+            document.getElementById('btn-short-next').style.display = isMobile ? 'none' : 'flex';
+            document.getElementById('controls-short-mobile').style.display = isMobile ? 'flex' : 'none';
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Ejecutar al inicio
+    </script>
+</body>
+</html>
