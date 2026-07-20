@@ -196,14 +196,14 @@
             border-left: none; border-top: none;
         }
 
-        #long-player {
+        #long-player, #effects-player {
             /* Aumentamos la duración a 0.5s para un fade más cinemático */
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
             opacity: 1;
             transform: scale(1);
         }
 
-        #long-player.video-changing {
+        #long-player.video-changing, #effects-player.video-changing {
             opacity: 0;
             transform: scale(0.97); /* Zoom invertido un poco más sutil */
         }
@@ -441,6 +441,23 @@
             </div>
         </section>
 
+        <!-- VIDEOS EFECTOS (NUEVO) -->
+        <section class="section">
+            <h2>Efectos</h2>
+            
+            <div class="media-panel">
+                <div class="video-wrapper-long">
+                    <iframe id="effects-player" class="horizontal-video" src="" allowfullscreen></iframe>
+                </div>
+                
+                <div class="controls-bar">
+                    <button class="btn-arrow" onclick="changeEffectsVideo(-1)">◄</button>
+                    <div class="video-counter" id="effects-counter">01 // 00</div>
+                    <button class="btn-arrow" onclick="changeEffectsVideo(1)">►</button>
+                </div>
+            </div>
+        </section>
+
         <!-- CONTACTO -->
         <footer class="contact">
             <h2>Contáctame</h2>
@@ -467,7 +484,7 @@
             long: [
                 "https://www.youtube.com/embed/CSBzLbjM2JI",
                 "https://www.youtube.com/embed/s8NzIBpJC5M",
-                "https://www.youtube.com/embed/tyhVqgvGRlU",           
+                "https://www.youtube.com/embed/tyhVqgvGRlU",
                 "https://www.youtube.com/embed/x79033fSle4"
             ],
             short: [
@@ -475,10 +492,14 @@
                 "https://www.youtube.com/embed/ux0ezYra4eA",
                 "https://www.youtube.com/embed/Mn37BHbm-Fk",
                 "https://www.youtube.com/embed/wIIlRHIEbUU"
+            ],
+            effects: [
+                // Coloca aquí tus enlaces para la sección de efectos. (Puse estos 2 de prueba para evitar el error)
+                "https://www.youtube.com/embed/EdXWCD1yH2k"
             ]
         };
 
-        let indices = { long: 0, short: 0 };
+        let indices = { long: 0, short: 0, effects: 0 };
 
         /* LOGICA PARA EL VIDEO LARGO (NORMAL) */
         function updateLongVideo() {
@@ -510,6 +531,34 @@
                 }, 200);
                 
             }, 500); // Coincide con los 0.5s de la transición CSS
+        }
+
+        /* LOGICA PARA LA SECCION DE EFECTOS (NUEVO) */
+        function updateEffectsVideo() {
+            document.getElementById('effects-player').src = videos.effects[indices.effects];
+            
+            const current = String(indices.effects + 1).padStart(2, '0');
+            const total = String(videos.effects.length).padStart(2, '0');
+            document.getElementById('effects-counter').innerText = `${current} // ${total}`;
+        }
+
+        function changeEffectsVideo(direction) {
+            const player = document.getElementById('effects-player');
+            
+            player.classList.add('video-changing');
+            
+            setTimeout(() => {
+                indices.effects += direction;
+                if (indices.effects >= videos.effects.length) indices.effects = 0;
+                if (indices.effects < 0) indices.effects = videos.effects.length - 1;
+                
+                updateEffectsVideo();
+                
+                setTimeout(() => {
+                    player.classList.remove('video-changing');
+                }, 200);
+                
+            }, 500);
         }
 
         /* LOGICA PARA EL CARRUSEL DE SHORTS 3D */
@@ -562,6 +611,7 @@
         // Cuando la pagina carga por primera vez
         window.onload = function() {
             updateLongVideo();
+            updateEffectsVideo();
             initShortsDeck();
         };
     </script>
