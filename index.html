@@ -3,26 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- ETIQUETAS DE VISTA PREVIA (OPEN GRAPH) -->
-    <meta property="og:title" content="iguanaEditor 🦎 | Portafolio">
-    <meta property="og:description" content="Me especializo en Gaming y Memes. Pero me adapto a cualquier otro tipo de contenido.">
-    <meta property="og:image" content="URL_DE_TU_IMAGEN.jpg"> <!-- Pon el link de tu logo o captura aquí -->
-    <meta property="og:url" content="TU_LINK_DE_NETLIFY">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    
     <title>iguanaEditor 🦎 | Portafolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Rajdhani:wght@500;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg: #0A0F0D;
             --surface: #111814;
+            --border-line: #233028;
             --accent-green: #B6FF3C;
             --accent-coral: #FF5B39;
             --text: #e2e8f0;
             --text-sec: #94a3b8;
-            --border: #233028;
             
             --font-title: 'Rajdhani', sans-serif;
             --font-text: 'Inter', sans-serif;
@@ -43,8 +35,8 @@
             position: relative;
         }
 
-        /* Scanlines Overlay - Detrás del contenido interactivo */
-        .scanlines {
+        body::before {
+            content: "";
             position: fixed;
             top: 0;
             left: 0;
@@ -59,15 +51,15 @@
             );
             background-size: 100% 4px;
             pointer-events: none;
-            z-index: 1; /* Nivel bajo */
-            opacity: 0.5;
+            /* Z-index bajo para que NO afecte a los videos (los videos estan en 30) */
+            z-index: 10;
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
             position: relative;
-            z-index: 10; /* Por encima de las scanlines */
+            z-index: 20; 
         }
 
         h1, h2, h3 {
@@ -80,7 +72,7 @@
             text-align: center;
             padding: 4rem 1rem;
             background: var(--surface);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-line);
             border-top: 4px solid var(--accent-coral); 
             margin-bottom: 3rem;
             position: relative;
@@ -89,15 +81,13 @@
         h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
-            font-weight: 700;
+            font-weight: 800;
             color: #ffffff;
-            text-shadow: 0 0 10px rgba(182, 255, 60, 0.2);
         }
 
         .accent {
             color: var(--accent-green);
-            font-weight: 800;
-            text-shadow: 0 0 15px rgba(182, 255, 60, 0.4);
+            text-shadow: 0px 0px 8px rgba(182, 255, 60, 0.4);
         }
 
         .bio {
@@ -116,7 +106,7 @@
             padding: 0.5rem 1.2rem;
             font-size: 0.95rem;
             font-weight: 700;
-            border: 1px solid var(--accent-green);
+            border: 1px solid var(--border-line);
             font-family: var(--font-title);
             letter-spacing: 0.5px;
         }
@@ -133,8 +123,22 @@
             50% { opacity: 0; }
         }
 
+        .portfolio-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+            color: var(--accent-green);
+            background: var(--surface);
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            border: 1px solid var(--border-line);
+            left: 50%;
+            position: relative;
+            transform: translateX(-50%);
+        }
+
         .section {
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
         }
 
         h2 {
@@ -142,128 +146,198 @@
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.75rem;
             color: #fff;
             background: var(--surface);
             padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--accent-coral);
-            text-align: center;
-            justify-content: center;
+            border-left: 4px solid var(--accent-green);
+            border: 1px solid var(--border-line);
+            text-align: center; 
         }
 
-        .carousel {
+        h2::before {
+            content: '//';
+            color: var(--accent-coral);
+            font-weight: 800;
+        }
+
+        .media-panel {
             background: var(--surface);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-line);
+            padding: 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
 
-        .video-wrapper {
+        .video-wrapper-long {
             width: 100%;
-            display: flex;
-            justify-content: center;
             position: relative;
             background: #000;
-            z-index: 20; /* Reproductores por encima de todo */
+            display: flex;
+        }
+
+        /* Esquinas camara (Solo video largo) */
+        .video-wrapper-long::before, .video-wrapper-long::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid var(--accent-coral);
+            pointer-events: none;
+            z-index: 50; 
+        }
+        .video-wrapper-long::before {
+            top: 0; left: 0;
+            border-right: none; border-bottom: none;
+        }
+        .video-wrapper-long::after {
+            bottom: 0; right: 0;
+            border-left: none; border-top: none;
+        }
+
+        #long-player, #effects-player {
+            /* Aumentamos la duración a 0.5s para un fade más cinemático */
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        #long-player.video-changing, #effects-player.video-changing {
+            opacity: 0;
+            transform: scale(0.97); /* Zoom invertido un poco más sutil */
         }
 
         iframe {
+            display: block;
             background: #000;
             border: none;
             width: 100%;
             position: relative;
-            z-index: 20;
-        }
-
-        /* Animaciones para videos largos y efectos */
-        #long-player, #effects-player {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .video-changing {
-            opacity: 0;
-            transform: scale(0.98);
+            z-index: 30; /* SUPER IMPORTANTE: Arriba de las scanlines (10) */
         }
 
         .horizontal-video {
             aspect-ratio: 16 / 9;
         }
 
-        /* Animación Carrusel 3D Shorts */
-        .shorts-container {
+        .shorts-carousel-container {
             width: 100%;
-            height: 500px;
+            height: 550px;
+            position: relative;
+            background: var(--bg); /* Fondo oscuro para dar profundidad */
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            overflow: hidden;
-            background: #000;
+            overflow: hidden; /* Cortar lo que se salga de los lados */
+            border-bottom: 1px solid var(--border-line);
         }
 
-        .short-card {
+        .carousel-card {
             position: absolute;
-            width: 280px;
-            height: 480px;
-            transition: all 0.5s ease-in-out;
+            width: 300px;
+            height: 533px; /* Proporción 16:9 vertical */
+            background: #000;
+            border: 1px solid var(--border-line);
+            /* Transición suave para barajar cartas */
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                        opacity 0.5s ease, 
+                        z-index 0.5s;
             opacity: 0;
             z-index: 10;
-            border: 1px solid var(--accent-green);
+            pointer-events: none; /* No se puede tocar si está escondido */
         }
 
-        .short-card iframe {
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Desactiva interacción por defecto */
-        }
-
-        /* Posiciones del Carrusel 3D */
-        .short-card.active {
+        /* Estado 1: La carta del Centro (Activa) */
+        .carousel-card.active {
             transform: translateX(0) scale(1);
             opacity: 1;
-            z-index: 30;
-            box-shadow: 0 0 20px rgba(182, 255, 60, 0.2);
-        }
-        .short-card.active iframe {
-            pointer-events: all; /* Solo el centro es clickeable */
+            z-index: 40; /* Arriba de todo */
+            pointer-events: auto; /* Sí se le puede dar Play */
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
         }
 
-        .short-card.prev {
-            transform: translateX(-60%) scale(0.85);
-            opacity: 0.4;
+        /* Estado 2: La carta de la Izquierda (Anterior) */
+        .carousel-card.prev {
+            transform: translateX(-65%) scale(0.85);
+            opacity: 0.3;
+            z-index: 20; 
+        }
+
+        /* Estado 3: La carta de la Derecha (Siguiente) */
+        .carousel-card.next {
+            transform: translateX(65%) scale(0.85);
+            opacity: 0.3;
             z-index: 20;
         }
 
-        .short-card.next {
-            transform: translateX(60%) scale(0.85);
-            opacity: 0.4;
-            z-index: 20;
+        /* Esquinas de cámara SOLO para la carta activa */
+        .carousel-card::before, .carousel-card::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid var(--accent-coral);
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .carousel-card.active::before, .carousel-card.active::after {
+            opacity: 1;
+        }
+        .carousel-card::before {
+            top: -1px; left: -1px;
+            border-right: none; border-bottom: none;
+        }
+        .carousel-card::after {
+            bottom: -1px; right: -1px;
+            border-left: none; border-top: none;
         }
 
-        .controls {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .carousel-card iframe {
             width: 100%;
-            padding: 1rem 1.5rem;
-            background: var(--bg);
-            border-top: 1px solid var(--border);
+            height: 100%;
+            pointer-events: inherit; /* Hereda el "none" o "auto" de la carta */
+        }
+
+        /* Responsive para celulares (Ajustar tamaño de cartas) */
+        @media (max-width: 768px) {
+            .shorts-carousel-container { height: 420px; }
+            .carousel-card { width: 220px; height: 391px; }
+            .carousel-card.prev { transform: translateX(-55%) scale(0.85); opacity: 0.2; }
+            .carousel-card.next { transform: translateX(55%) scale(0.85); opacity: 0.2; }
+        }
+
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            border-top: 1px solid var(--border-line);
+            padding: 0.5rem;
+        }
+
+        .video-counter {
+            font-family: var(--font-title);
+            color: var(--text-sec);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
         .btn-arrow {
-            background: var(--surface);
+            background: var(--bg);
             color: var(--accent-green);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-line);
             width: 40px;
             height: 40px;
             font-size: 1.2rem;
             cursor: pointer;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.1s ease;
         }
 
         .btn-arrow:hover {
@@ -272,43 +346,36 @@
             border-color: var(--accent-green);
         }
 
-        .counter {
-            font-family: var(--font-title);
-            font-weight: 700;
-            color: var(--accent-green);
-            letter-spacing: 2px;
-            font-size: 1.1rem;
-        }
-
         .contact {
             text-align: center;
-            padding: 3rem 1rem;
+            padding: 4rem 2rem;
             background: var(--surface);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--accent-green);
+            border: 1px solid var(--border-line);
+            border-left: 4px solid var(--accent-coral);
             margin-top: 4rem;
         }
 
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
             flex-wrap: wrap;
         }
 
         .social-btn {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             background: var(--bg);
-            color: var(--text);
-            padding: 0.8rem 1.5rem;
+            color: var(--text-sec);
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--border-line);
             text-decoration: none;
             font-family: var(--font-title);
-            font-size: 1.1rem;
             font-weight: 700;
+            font-size: 1.1rem;
             letter-spacing: 1px;
-            border: 1px solid var(--border);
             transition: all 0.2s ease;
         }
 
@@ -320,94 +387,92 @@
         }
 
         .social-btn:hover {
-            border-color: var(--accent-green);
             color: var(--accent-green);
-            box-shadow: 0 0 15px rgba(182, 255, 60, 0.1);
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 2.2rem; }
-            .short-card {
-                width: 220px;
-                height: 390px;
-            }
-            .short-card.prev { transform: translateX(-40%) scale(0.85); }
-            .short-card.next { transform: translateX(40%) scale(0.85); }
+            border-color: var(--accent-green);
+            background: rgba(182, 255, 60, 0.05);
+            text-shadow: 0 0 8px rgba(182, 255, 60, 0.4);
         }
     </style>
 </head>
 <body>
-
-    <div class="scanlines"></div>
-
     <div class="container">
         <!-- HERO -->
         <header class="hero">
-            <h1>¡HOLA! ¿QUÉ TAL? SOY <span class="accent">CARLOS</span></h1>
-            <p class="bio">La persona detrás de iguanaEditor. Me especializo en Gaming y Memes. Pero me adapto a cualquier otro tipo de contenido.</p>
-            <div class="badge">TODOS MIS VIDEOS SON EDITADOS CON DAVINCI RESOLVE</div>
+            <h1>¡Hola! ¿Qué tal? Soy Carlos 🦎</h1>
+            <p class="bio">La persona detrás de <span class="accent">iguanaEditor</span>. Me especializo en Gaming y Memes. Pero me adapto a cualquier otro tipo de contenido.</p>
+            <div class="badge">🎬 Editado con DaVinci Resolve</div>
         </header>
+
+        <h1 class="portfolio-title">Mi portafolio</h1>
 
         <!-- VIDEOS LARGOS -->
         <section class="section">
-            <h2>VIDEOS LARGOS</h2>
-            <div class="carousel">
-                <div class="video-wrapper">
+            <h2>Videos largos</h2>
+            
+            <div class="media-panel">
+                <div class="video-wrapper-long">
+                    <!-- Reproductor vacio (Se llena por Javascript automáticamente) -->
                     <iframe id="long-player" class="horizontal-video" src="" allowfullscreen></iframe>
                 </div>
-                <div class="controls">
-                    <button class="btn-arrow" onclick="changeLongVideo(-1)">&#10094;</button>
-                    <div class="counter" id="long-counter">01 // 00</div>
-                    <button class="btn-arrow" onclick="changeLongVideo(1)">&#10095;</button>
+                
+                <div class="controls-bar">
+                    <button class="btn-arrow" onclick="changeLongVideo(-1)">◄</button>
+                    <div class="video-counter" id="long-counter">01 // 00</div>
+                    <button class="btn-arrow" onclick="changeLongVideo(1)">►</button>
                 </div>
             </div>
         </section>
 
-        <!-- VIDEOS VERTICALES (SHORTS 3D) -->
+        <!-- VIDEOS VERTICALES (NUEVO CARRUSEL) -->
         <section class="section">
-            <h2>VIDEOS VERTICALES</h2>
-            <div class="carousel">
-                <div class="shorts-container" id="shorts-track">
-                    <!-- Los shorts se generan aquí por JS -->
+            <h2>Videos verticales</h2>
+            
+            <div class="media-panel">
+                <!-- Aquí es donde aparecerán las cartas 3D inyectadas por JS -->
+                <div id="shorts-deck" class="shorts-carousel-container">
+                    <!-- Las cartas de iframe van aqui -->
                 </div>
-                <div class="controls">
-                    <button class="btn-arrow" onclick="changeShortVideo(-1)">&#10094;</button>
-                    <div class="counter" id="short-counter">01 // 00</div>
-                    <button class="btn-arrow" onclick="changeShortVideo(1)">&#10095;</button>
+                
+                <div class="controls-bar">
+                    <button class="btn-arrow" onclick="changeShortVideo(-1)">◄</button>
+                    <div class="video-counter" id="short-counter">01 // 00</div>
+                    <button class="btn-arrow" onclick="changeShortVideo(1)">►</button>
                 </div>
             </div>
         </section>
 
-        <!-- EFECTOS -->
+        <!-- VIDEOS EFECTOS (NUEVO) -->
         <section class="section">
-            <h2>EFECTOS</h2>
-            <div class="carousel">
-                <div class="video-wrapper">
+            <h2>Efectos</h2>
+            
+            <div class="media-panel">
+                <div class="video-wrapper-long">
                     <iframe id="effects-player" class="horizontal-video" src="" allowfullscreen></iframe>
                 </div>
-                <div class="controls">
-                    <button class="btn-arrow" onclick="changeEffectsVideo(-1)">&#10094;</button>
-                    <div class="counter" id="effects-counter">01 // 00</div>
-                    <button class="btn-arrow" onclick="changeEffectsVideo(1)">&#10095;</button>
+                
+                <div class="controls-bar">
+                    <button class="btn-arrow" onclick="changeEffectsVideo(-1)">◄</button>
+                    <div class="video-counter" id="effects-counter">01 // 00</div>
+                    <button class="btn-arrow" onclick="changeEffectsVideo(1)">►</button>
                 </div>
             </div>
         </section>
 
         <!-- CONTACTO -->
         <footer class="contact">
-            <h2 style="border:none; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 2rem;">CONTÁCTAME</h2>
+            <h2>Contáctame</h2>
             <div class="social-links">
                 <a href="mailto:iguanaeditor@gmail.com" class="social-btn">
                     <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                    MAIL
+                    [MAIL]
                 </a>
                 <a href="https://x.com/iguanacg" target="_blank" class="social-btn">
                     <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                    X
+                    [X]
                 </a>
                 <a href="https://discord.com/users/431931152392257566" target="_blank" class="social-btn">
                     <svg viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
-                    DISCORD
+                    [DISCORD]
                 </a>
             </div>
         </footer>
@@ -434,107 +499,121 @@
                 "https://www.youtube.com/embed/fmKI8_ZN_Pw"
             ]
         };
+
         let indices = { long: 0, short: 0, effects: 0 };
 
-        // --- VIDEOS LARGOS ---
-        function updateLongDisplay() {
-            const total = videos.long.length.toString().padStart(2, '0');
-            const current = (indices.long + 1).toString().padStart(2, '0');
+        /* LOGICA PARA EL VIDEO LARGO (NORMAL) */
+        function updateLongVideo() {
+            document.getElementById('long-player').src = videos.long[indices.long];
+            
+            // Actualizar contador
+            const current = String(indices.long + 1).padStart(2, '0');
+            const total = String(videos.long.length).padStart(2, '0');
             document.getElementById('long-counter').innerText = `${current} // ${total}`;
         }
 
         function changeLongVideo(direction) {
-            indices.long += direction;
-            if (indices.long >= videos.long.length) indices.long = 0;
-            if (indices.long < 0) indices.long = videos.long.length - 1;
-            
             const player = document.getElementById('long-player');
+            
+            // 1. Iniciamos la animación de "salida" (desaparece)
             player.classList.add('video-changing');
             
+            // 2. Esperamos 500ms a que termine de desaparecer por completo
             setTimeout(() => {
-                player.src = videos.long[indices.long];
+                indices.long += direction;
+                if (indices.long >= videos.long.length) indices.long = 0;
+                if (indices.long < 0) indices.long = videos.long.length - 1;
+                
+                updateLongVideo(); // Cambia el link del iframe en la oscuridad
+                
+                // 3. Le damos 200ms extra a YouTube para cargar la miniatura antes de reaparecer
                 setTimeout(() => {
                     player.classList.remove('video-changing');
-                    updateLongDisplay();
-                }, 150);
-            }, 500);
+                }, 200);
+                
+            }, 500); // Coincide con los 0.5s de la transición CSS
         }
 
-        // --- EFECTOS ---
-        function updateEffectsDisplay() {
-            const total = videos.effects.length.toString().padStart(2, '0');
-            const current = (indices.effects + 1).toString().padStart(2, '0');
+        /* LOGICA PARA LA SECCION DE EFECTOS (NUEVO) */
+        function updateEffectsVideo() {
+            document.getElementById('effects-player').src = videos.effects[indices.effects];
+            
+            const current = String(indices.effects + 1).padStart(2, '0');
+            const total = String(videos.effects.length).padStart(2, '0');
             document.getElementById('effects-counter').innerText = `${current} // ${total}`;
         }
 
         function changeEffectsVideo(direction) {
-            indices.effects += direction;
-            if (indices.effects >= videos.effects.length) indices.effects = 0;
-            if (indices.effects < 0) indices.effects = videos.effects.length - 1;
-            
             const player = document.getElementById('effects-player');
+            
             player.classList.add('video-changing');
             
             setTimeout(() => {
-                player.src = videos.effects[indices.effects];
+                indices.effects += direction;
+                if (indices.effects >= videos.effects.length) indices.effects = 0;
+                if (indices.effects < 0) indices.effects = videos.effects.length - 1;
+                
+                updateEffectsVideo();
+                
                 setTimeout(() => {
                     player.classList.remove('video-changing');
-                    updateEffectsDisplay();
-                }, 150);
+                }, 200);
+                
             }, 500);
         }
 
-        // --- VIDEOS VERTICALES (CARRUSEL 3D) ---
-        function initShorts() {
-            const track = document.getElementById('shorts-track');
-            track.innerHTML = '';
+        /* LOGICA PARA EL CARRUSEL DE SHORTS 3D */
+        function initShortsDeck() {
+            const container = document.getElementById('shorts-deck');
             
-            videos.short.forEach((url, i) => {
+            // Crea un iframe-carta por cada video en el arreglo 'short'
+            videos.short.forEach((src) => {
                 const card = document.createElement('div');
-                card.className = 'short-card';
-                card.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
-                track.appendChild(card);
+                card.className = 'carousel-card';
+                card.innerHTML = `<iframe src="${src}" allowfullscreen></iframe>`;
+                container.appendChild(card);
             });
-            updateShortClasses();
-        }
-
-        function updateShortClasses() {
-            const cards = document.querySelectorAll('.short-card');
-            const total = videos.short.length;
             
-            cards.forEach((card, index) => {
-                card.className = 'short-card'; // Limpia clases
-                
-                if (index === indices.short) {
-                    card.classList.add('active');
-                } else if (index === (indices.short - 1 + total) % total) {
-                    card.classList.add('prev');
-                } else if (index === (indices.short + 1) % total) {
-                    card.classList.add('next');
-                }
-            });
-
-            const currentStr = (indices.short + 1).toString().padStart(2, '0');
-            const totalStr = total.toString().padStart(2, '0');
-            document.getElementById('short-counter').innerText = `${currentStr} // ${totalStr}`;
+            updateShortsVisuals();
         }
 
         function changeShortVideo(direction) {
             indices.short += direction;
             if (indices.short >= videos.short.length) indices.short = 0;
             if (indices.short < 0) indices.short = videos.short.length - 1;
-            updateShortClasses();
+            updateShortsVisuals();
         }
 
-        // Inicializar al cargar
-        window.onload = () => {
-            document.getElementById('long-player').src = videos.long[0];
-            updateLongDisplay();
-            
-            document.getElementById('effects-player').src = videos.effects[0];
-            updateEffectsDisplay();
-            
-            initShorts();
+        function updateShortsVisuals() {
+            const cards = document.querySelectorAll('#shorts-deck .carousel-card');
+            const total = cards.length;
+            const currentIdx = indices.short;
+
+            cards.forEach((card, index) => {
+                // Reiniciamos todas a invisibles por defecto
+                card.className = 'carousel-card'; 
+
+                // Identificamos cual es la Activa, Anterior y Siguiente
+                if (index === currentIdx) {
+                    card.classList.add('active');
+                } else if (index === (currentIdx - 1 + total) % total) {
+                    card.classList.add('prev');
+                } else if (index === (currentIdx + 1) % total) {
+                    card.classList.add('next');
+                }
+            });
+
+            // Actualizar contador
+            const current = String(indices.short + 1).padStart(2, '0');
+            const totalStr = String(total).padStart(2, '0');
+            document.getElementById('short-counter').innerText = `${current} // ${totalStr}`;
+        }
+
+        // Cuando la pagina carga por primera vez
+        window.onload = function() {
+            updateLongVideo();
+            updateEffectsVideo();
+            initShortsDeck();
         };
     </script>
 </body>
