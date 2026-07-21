@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iguanaEditor 🦎 | Portafolio</title>
+    
+    <!-- ETIQUETAS DE VISTA PREVIA (OPEN GRAPH) -->
+    <meta property="og:title" content="iguanaEditor &#129422; | Portafolio">
+    <meta property="og:description" content="Me especializo en Gaming y Memes. Pero me adapto a cualquier otro tipo de contenido.">
+    <meta property="og:image" content="https://drive.google.com/file/d/1Ts6rVR8rorO0WjsJ4eVsPW3VcdFWNEb_/view?usp=sharing"> <!-- Pon el link de tu logo o captura aquí -->
+    <meta property="og:url" content="https://portafolioiguanaeditor.netlify.app">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <title>iguanaEditor &#129422; | Portafolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Rajdhani:wght@500;700;800&display=swap" rel="stylesheet">
     
     <style>
@@ -16,8 +25,9 @@
             --text: #e2e8f0;
             --text-sec: #94a3b8;
             
-            --font-title: 'Rajdhani', sans-serif;
-            --font-text: 'Inter', sans-serif;
+            /* Fuentes con soporte forzado para Emojis */
+            --font-title: 'Rajdhani', "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+            --font-text: 'Inter', "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
         }
 
         * {
@@ -398,7 +408,7 @@
     <div class="container">
         <!-- HERO -->
         <header class="hero">
-            <h1>¡Hola! ¿Qué tal? Soy Carlos 🦎</h1>
+            <h1>¡Hola! ¿Qué tal? Soy Carlos &#129422;</h1>
             <p class="bio">La persona detrás de <span class="accent">iguanaEditor</span>. Me especializo en Gaming y Memes. Pero me adapto a cualquier otro tipo de contenido.</p>
             <div class="badge">🎬 Editado con DaVinci Resolve</div>
         </header>
@@ -503,8 +513,10 @@
         let indices = { long: 0, short: 0, effects: 0 };
 
         /* LOGICA PARA EL VIDEO LARGO (NORMAL) */
-        function updateLongVideo() {
-            document.getElementById('long-player').src = videos.long[indices.long];
+        function updateLongVideo(autoplay = false) {
+            let url = videos.long[indices.long];
+            if (autoplay) url += "?autoplay=1"; // Reproducir automático al cambiar
+            document.getElementById('long-player').src = url;
             
             // Actualizar contador
             const current = String(indices.long + 1).padStart(2, '0');
@@ -524,7 +536,7 @@
                 if (indices.long >= videos.long.length) indices.long = 0;
                 if (indices.long < 0) indices.long = videos.long.length - 1;
                 
-                updateLongVideo(); // Cambia el link del iframe en la oscuridad
+                updateLongVideo(true); // Le pasamos "true" para que le dé Autoplay
                 
                 // 3. Le damos 200ms extra a YouTube para cargar la miniatura antes de reaparecer
                 setTimeout(() => {
@@ -535,8 +547,10 @@
         }
 
         /* LOGICA PARA LA SECCION DE EFECTOS (NUEVO) */
-        function updateEffectsVideo() {
-            document.getElementById('effects-player').src = videos.effects[indices.effects];
+        function updateEffectsVideo(autoplay = false) {
+            let url = videos.effects[indices.effects];
+            if (autoplay) url += "?autoplay=1";
+            document.getElementById('effects-player').src = url;
             
             const current = String(indices.effects + 1).padStart(2, '0');
             const total = String(videos.effects.length).padStart(2, '0');
@@ -553,7 +567,7 @@
                 if (indices.effects >= videos.effects.length) indices.effects = 0;
                 if (indices.effects < 0) indices.effects = videos.effects.length - 1;
                 
-                updateEffectsVideo();
+                updateEffectsVideo(true);
                 
                 setTimeout(() => {
                     player.classList.remove('video-changing');
@@ -570,21 +584,22 @@
             videos.short.forEach((src) => {
                 const card = document.createElement('div');
                 card.className = 'carousel-card';
-                card.innerHTML = `<iframe src="${src}" allowfullscreen></iframe>`;
+                // Añadimos ?enablejsapi=1 para poder controlarlos desde Javascript
+                card.innerHTML = `<iframe src="${src}?enablejsapi=1" allowfullscreen></iframe>`;
                 container.appendChild(card);
             });
             
-            updateShortsVisuals();
+            updateShortsVisuals(false); // Falso para no auto-reproducir al cargar la página
         }
 
         function changeShortVideo(direction) {
             indices.short += direction;
             if (indices.short >= videos.short.length) indices.short = 0;
             if (indices.short < 0) indices.short = videos.short.length - 1;
-            updateShortsVisuals();
+            updateShortsVisuals(true); // Verdadero para que al dar click empiece a sonar
         }
 
-        function updateShortsVisuals() {
+        function updateShortsVisuals(autoplay = false) {
             const cards = document.querySelectorAll('#shorts-deck .carousel-card');
             const total = cards.length;
             const currentIdx = indices.short;
@@ -592,14 +607,25 @@
             cards.forEach((card, index) => {
                 // Reiniciamos todas a invisibles por defecto
                 card.className = 'carousel-card'; 
+                const iframe = card.querySelector('iframe');
 
                 // Identificamos cual es la Activa, Anterior y Siguiente
                 if (index === currentIdx) {
                     card.classList.add('active');
-                } else if (index === (currentIdx - 1 + total) % total) {
-                    card.classList.add('prev');
-                } else if (index === (currentIdx + 1) % total) {
-                    card.classList.add('next');
+                    if (autoplay && iframe && iframe.contentWindow) {
+                        // Forzamos el PLAY al video que entra al centro
+                        iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                    }
+                } else {
+                    if (index === (currentIdx - 1 + total) % total) {
+                        card.classList.add('prev');
+                    } else if (index === (currentIdx + 1) % total) {
+                        card.classList.add('next');
+                    }
+                    // Forzamos el PAUSE a todos los videos que no estén en el centro
+                    if (iframe && iframe.contentWindow) {
+                        iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
                 }
             });
 
